@@ -38,9 +38,9 @@
 }
 
 .container{
-  background-color: #F2D7B6;
+  background-color: #c8c8c8;
   border: 0px solid #000000;
-  color: #343333;
+  color: #000000;
   min-height: 70vh;
   padding: 12px;
   display: flex;
@@ -65,7 +65,7 @@
 
 
 .App-footer{
-  background-color: #343333;
+  background-color: #000000;
   border: 0px solid #000000;
   color: #AAAAAA;
   min-height: 5vh;
