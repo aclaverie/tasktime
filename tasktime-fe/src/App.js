@@ -1,5 +1,6 @@
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import './App.css';
+import Timetask from './components/timetask';
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
       </header>
       
       <main className="container">
-        <h4>Welcome to Task Time!</h4>        
+        <h2>Welcome to Task Time!</h2>
+        
+        <Timetask />        
       </main>
       <div className="App-footer">
         <div className="footer-info">
