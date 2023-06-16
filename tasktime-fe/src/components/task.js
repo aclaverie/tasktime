@@ -1,9 +1,10 @@
+import React from 'react';
+import { useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React from 'react';
-import { useState } from 'react';
+
 
 
 
@@ -20,7 +21,7 @@ function TaskList(props){
   function handleChange(e){
     e.preventDefault();
     const {name, value, type, checked} = e.target;
-    console.log(name);
+    // console.log(name);
     setEdit((prevData) => {
       return{
       ...prevData,
@@ -31,20 +32,25 @@ function TaskList(props){
 
   const taskList = props.taskList.map((task) => {
     return(
-      <form>
-        <div key={task.id} className="task-box">
+      <form className="task-box">
+        <div key={task.id} >
           <div className='box-top'>
-            <FormControl >
+            <FormControl fullWidth >
               <FormControlLabel
-                control={<Checkbox />}
-                label="Task"
                 name="task"
-                checked={task.task}
+                value={task.task}
+                control={<TextField label="Task" variant="outlined" fullWidth />}
                 onChange={handleChange}
                 />
-            </FormControl>      
-            <div >Task:<br /> {task.task}</div>
-            <div >Assignee:<br /> {task.who}</div>
+            </FormControl>
+            <FormControl >
+              <FormControlLabel
+                name="who"
+                value={task.who}
+                control={<TextField label="Assignee" variant="outlined" />}
+                onChange={handleChange}
+                />
+            </FormControl>
           </div>
           <div className='box-bottom'>
             <div >
@@ -59,25 +65,39 @@ function TaskList(props){
               </FormControl>  
             </div>
             <div >
-              DueDate: {task.dueDate}
+              <FormControl >
+                <FormControlLabel
+                  name="dueDate"
+                  value={task.dueDate}
+                  control={<TextField label="Due Date" variant="outlined" />}
+                  onChange={handleChange}
+                  />
+              </FormControl>
             </div>
           </div>
-          <div className='box-button'>
-            <Button
-              style={{marginRight: 12}}
-              variant="outlined" 
-              size="small" 
-              onClick={handleChange} 
-              startIcon={<EditIcon />}>
-                Edit 
-            </Button>
-            <Button 
-              variant="outlined" 
-              size="small" 
-              onClick={handleChange} 
-              startIcon={<DeleteIcon />}>
-                Remove 
-            </Button>
+          <div className='tasklist-btn'>
+            <FormControl fullWidth >
+              <Button
+                className="task-edit-btn"
+                variant="contained"
+                color="warning" 
+                size="small" 
+                onClick={handleChange} 
+                startIcon={<EditIcon />}>
+                  Edit 
+              </Button>
+            </FormControl>
+            <FormControl fullWidth >
+              <Button
+                className="task-remove-btn"
+                variant='outlined'
+                color="error"
+                size="small" 
+                onClick={handleChange} 
+                startIcon={<DeleteIcon />}>
+                  Remove 
+              </Button>
+            </FormControl>            
           </div>
         </div>
       </form>

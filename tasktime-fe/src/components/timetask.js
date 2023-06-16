@@ -5,7 +5,6 @@ import AddTask from './addTask';
 import WriteTask from './writeTask';
 import TaskList from './task';
 
-
 function Timetask(){
   const [compose, setCompose] = useState(false);
   const [show, setShow] = useState(false);
@@ -13,10 +12,30 @@ function Timetask(){
   const [tasks, setTasks] = useState([]);
   const loading = open && tasks.length === 0;
 
+  function Filtered(serachTerm){
+    const url = `http://localhost:4000/api/tasks?who=${serachTerm}`;
+    const result = async () => { 
+      await fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        // console.log(data)
+        if(!data.error){
+          // setTasks([]);
+          setTasks([...data]);
+        }
+      })
+    };
+    result();
+  }
+
   function openTask(){
     setShow(prevOpen => !prevOpen);
     setCompose(prevCompose => !prevCompose);    
   }
+
+
 
   React.useEffect(() => {
     (async () => {
@@ -27,21 +46,22 @@ function Timetask(){
         .then(data => {
           // console.log(data);
           setTasks([...data]);
+          setOpen(open => !open);
       })
     })();
   }, [loading]);
 
-  React.useEffect(() => {
-    if (!open) {
-      setTasks([]);
-    }
-  }, [open]);
+  // React.useEffect(() => {
+  //   if (!open) {
+  //     setTasks([]);
+  //   }
+  // }, [open]);
 
   return(
-    <div>
-      <div>
-        <Search />
-        <div className='task-btn'>
+    <div className='over-box'>
+      <div className='box-in-box'>
+        <Search Searcher={Filtered} />
+        <div className='add-box'>
           <AddTask handleClick={openTask} sign={show} />
           {compose && <WriteTask />}
         </div>

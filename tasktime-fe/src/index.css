@@ -1,11 +1,9 @@
 body {
   margin: 0;
-  background-color: #9F9F9F;
+  background-color: #CCCCCC;
   font-family: 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
