@@ -37,7 +37,7 @@
 }
 
 .container{
-  background-color: #EDEDE1;
+  background-color: #CCCCCC;
   border: 0px solid #000000;
   color: #000000;
   min-height: 70vh;
@@ -49,8 +49,10 @@
 }
 
 .add-box{
-  background-color: #ed6c02;
-  border: 0px solid #FF0000;
+  margin-top: 12px;
+  background-color: #EDEDE1;
+  border: 3px solid #d32f2f;
+  border-radius: 7px 7px 7px 7px;
   width: 100%
 }
 
@@ -119,10 +121,11 @@
 .tasklist-btn{
   padding-left: 12px;
   padding-right: 18px;
-  min-height: 11vh;
+  min-height: 21vh;
   display: flex;
-  align-items: center;
+  align-items: space-between;
   flex-direction: column;
+
 }
 
 .task-edit-btn{

@@ -3,17 +3,24 @@ import { useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 
-function WriteTask(){
+function WriteTask(props){
   const [newTask, setNewTask] = useState({
-    task: "",
-    who: "",
-    dueDate: "",
+    task: '',
+    who: '',
+    dueDate: '',
     done: false,
   })
 
   function handleSubmit(e){
     e.preventDefault();
-    console.log({newTask});
+    // console.log(newTask);
+    props.Saving(newTask);
+    setNewTask({
+      task: '',
+      who: '',
+      dueDate: '',
+      done: false,
+    });
   }
 
   function handleChange(e){
@@ -22,10 +29,11 @@ function WriteTask(){
     setNewTask((prevTask)=>{
       return {
         ...prevTask,
-        [name]: (type === "checked") ? {checked} : {value},
+        [name]: (type === "checked") ? checked : value,
       }
     });
   }
+
   return(
     <form className='form-box'>
         <div className='box-top'>
@@ -71,7 +79,7 @@ function WriteTask(){
         </div>
         <div className='box-btn'>
           <FormControl fullWidth >
-            <Button variant='contained' onClick={handleSubmit} color="warning">Submit</Button>
+            <Button variant='contained' onClick={handleSubmit} color="error" >Submit</Button>
           </FormControl>
         </div>
     </form>

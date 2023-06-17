@@ -21,7 +21,7 @@ function App() {
       </header>
       
       <main className="container">
-        <h2>Welcome to Task Time!</h2>
+        <h2>Welcome to Task-Time!</h2>
         
         <Timetask />        
       </main>

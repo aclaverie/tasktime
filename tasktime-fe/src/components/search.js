@@ -6,13 +6,13 @@ import { useState } from 'react';
 
 
 
-function Search(props){
+function Search(props) {
   const [open, setOpen] = useState(false);
   // const [active, setActive] = useState(true);
   const [tasksD, setTasksD] = useState([]);
   const loading = open && tasksD.length === 0;
 
-  
+
   React.useEffect(() => {
     // //Set loading to be true from focus
     let active = true;
@@ -26,10 +26,13 @@ function Search(props){
       await fetch("http://localhost:4000/api/tasks")
         .then(response => {
           return response.json();
-      })
+        })
         .then(data => {
+          const selOpt = [];
           //Extract the who for assignee to use in search drop list
-          const whoData = data.map((d)=>( d.who));          
+          const whoData = data.map((d) => {
+            return selOpt[d._id] = d.who;
+          });
           //create unique records simply remove dubplicates
           const uniqueData = [...new Set(whoData)];
           //Set Tasks Listing
@@ -40,7 +43,7 @@ function Search(props){
     })();
     //Set active action to false
     return () => {
-      active=false;
+      active = false;
     };
   }, [loading]);
 
@@ -52,7 +55,7 @@ function Search(props){
   }, [open]);
 
   //Handle search clicked to return records
-  function choosen(e){
+  function choosen(e) {
     // console.log(e.target.value);
     props.Searcher(e.target.value);
   }
@@ -60,7 +63,7 @@ function Search(props){
   return (
     <div className='search'>
       <Autocomplete
-        sx={{  }}
+        sx={{}}
         open={open}
         onSelect={choosen}
         onOpen={() => {
@@ -71,12 +74,12 @@ function Search(props){
         }}
         // isOptionEqualToValue={(option, value) => option.assignee === value}
         // getOptionLabel={(option) => option.assignee}
-        options={tasksD.map((option) => (option))}
+        options={tasksD.map((d) => (d))}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Assignee Search"
+            label="Search Assignee"
             InputProps={{
               ...params.InputProps,
               endAdornment: (
