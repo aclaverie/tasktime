@@ -12,6 +12,7 @@ function Timetask() {
   const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState(false);
+  const [recDelete, setRecDelete] = useState(false);
   const [marker, setMarker] = useState("info");
   const [notify, setNotify] = useState("Click in Search Assignee and type name to filter list, then select assignee and hit enter to show to do tasks.");
   const [tasks, setTasks] = useState([]);
@@ -30,68 +31,9 @@ function Timetask() {
           return response.json();
         })
         .then(data => {
-          if (!data.error) {
-            setNotify(`Last saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
-            setSaved(true);
-            setError(false);
-          } else {
-            setNotify(`Last submission did not save, error: ${data.error}`);
-            setSaved(false);
-            setError(true);
-          }
+          Notifier(data, setNotify, setSaved, setError);
         })
     })();
-  }
-
-  function Filtered(serachTerm) {
-    const url = `http://localhost:4000/api/tasks?who=${serachTerm}`;
-    (async () => {
-      await fetch(url)
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          // console.log(data)
-          // if (!data.error) {
-          //   setNotify(`Last saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
-          //   setSaved(true);
-          //   setError(false);
-          // } else {
-          //   setNotify(`Last submission did not save, error: ${data.error}`);
-          //   setSaved(false);
-          //   setError(true);
-          // }
-        })
-    })();
-  }
-
-
-
-  function SaveEdit(newTask) {
-    const requestOptions = {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newTask)
-    };
-    const url = `http://localhost:4000/api/tasks/${newTask._id}`;
-    (async () => {
-      await fetch(url, requestOptions)
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          console.log(data)
-          // if (!data.error) {
-          //   // setTasks([]);
-          //   setSaved(true);
-          //   return data;
-          // }
-        })
-        .catch(err => {
-          return err;
-        })
-    })();
-    //console.log(result());
   }
 
   function openTask() {
@@ -104,8 +46,6 @@ function Timetask() {
     setError(false);
   }
 
-
-
   useEffect(() => {
     (async () => {
       await fetch("http://localhost:4000/api/tasks")
@@ -113,18 +53,12 @@ function Timetask() {
           return response.json();
         })
         .then(data => {
-          // console.log(data);
+          console.log(data);
           setTasks([...data]);
           setOpen(open => !open);
         })
     })();
-  }, [loading]);
-
-  // React.useEffect(() => {
-  //   if (!open) {
-  //     setTasks([]);
-  //   }
-  // }, [open]);
+  }, [loading, saved]);
 
   useEffect(() => {
     if (!saved && !error) {
@@ -136,21 +70,41 @@ function Timetask() {
     }
   },[saved, error]);
 
+  // React.useEffect(() => {
+  //   if (!open) {
+  //     setTasks([]);
+  //   }
+  // }, [open]);
+
+  
+
   return (
     <div className='over-box'>
       <div className='box-in-box'>
-        <Search Searcher={Filtered} />
+        <Search Searcher={setTasks} Searched={recDelete} />
         <Alert severity={marker}>{notify}</Alert>
         <div className='add-box'>
           <AddTask handleClick={openTask} sign={show} />
-          {compose && <WriteTask Saving={saveNewTask} Notification={saved} />}
+          {compose && <WriteTask Saving={saveNewTask}  />}
         </div>
       </div>
       <div>
-        <TaskList taskList={tasks} SaveEdit={SaveEdit} />
+        <TaskList taskList={tasks} RecDelete={setRecDelete} />
       </div>
     </div>
   )
 }
 
-export default Timetask;
+export { Timetask, Notifier };
+
+function Notifier(data, setNotify, setSaved, setError) {
+  if (!data.error) {
+    setNotify(`Last saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
+    setSaved(true);
+    setError(false);
+  } else {
+    setNotify(`Last submission did not save, error: ${data.error}`);
+    setSaved(false);
+    setError(true);
+  }
+}

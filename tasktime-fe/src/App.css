@@ -121,7 +121,7 @@
 .tasklist-btn{
   padding-left: 12px;
   padding-right: 18px;
-  min-height: 21vh;
+  min-height: 12vh;
   display: flex;
   align-items: space-between;
   flex-direction: column;

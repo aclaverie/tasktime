@@ -2,18 +2,18 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 
 function Search(props) {
   const [open, setOpen] = useState(false);
-  // const [active, setActive] = useState(true);
+  const [inputValue, setInputValue] = useState('');
   const [tasksD, setTasksD] = useState([]);
   const loading = open && tasksD.length === 0;
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     // //Set loading to be true from focus
     let active = true;
     //Check loading to get Tasks Listing else break out
@@ -45,41 +45,46 @@ function Search(props) {
     return () => {
       active = false;
     };
-  }, [loading]);
+  }, [loading, props.Searched]);
 
-  //
-  React.useEffect(() => {
-    if (!open) {
-      setTasksD([]);
-    }
-  }, [open]);
-
-  //Handle search clicked to return records
-  function choosen(e) {
-    // console.log(e.target.value);
-    props.Searcher(e.target.value);
-  }
+  useEffect(() => {
+    (async () => {
+      const url = `http://localhost:4000/api/tasks?who=${inputValue}`;
+      await fetch(url)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          if (!data.error) {
+            props.Searcher([...data]);
+            
+          }
+        })
+    })();
+  }, [inputValue, props.Searched]);
 
   return (
     <div className='search'>
       <Autocomplete
-        sx={{}}
         open={open}
-        onSelect={choosen}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
         onOpen={() => {
           setOpen(true);
         }}
         onClose={() => {
           setOpen(false);
         }}
-        // isOptionEqualToValue={(option, value) => option.assignee === value}
-        // getOptionLabel={(option) => option.assignee}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         options={tasksD.map((d) => (d))}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
             label="Search Assignee"
+
             InputProps={{
               ...params.InputProps,
               endAdornment: (
