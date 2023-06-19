@@ -10,7 +10,6 @@ import CloseIcon from '@mui/icons-material/Close';
 function TaskBox(props) {
   const [open, setOpen] = useState(false);
   const [notify, setNotify] = useState("Click in Search Assignee and type name to filter list, then select assignee and hit enter to show to do tasks.");
-  
   const [taskEdit, setTaskEdit] = useState(false);
   const [edit, setEdit] = useState({
     id: props.data._id,
@@ -18,7 +17,23 @@ function TaskBox(props) {
     who: props.data.who,
     dueDate: props.data.dueDate,
     done: props.data.done
-  })
+  });
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={CloseSnack}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
+  function CloseSnack() {
+    setOpen(false);
+  }
 
   function handleChange(e) {
     e.preventDefault();
@@ -40,30 +55,26 @@ function TaskBox(props) {
   }
 
   function DeleteIt() {
-    
-    <Alert>Sorry there is no data recovery from this DELETE action!</Alert>
+    props.RecToDelete(prevRe => !prevRe);
     const requestOptions = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
-
     const url = `http://localhost:4000/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
-          // console.log(response.ok);
-          if(response.ok){
-            setNotify(`The record was successfully removed!`);
+          if (response.ok) {
             //let timetask component knows records was deleted to refresh list
-            props.RecToDelete(true);
+            props.RecToDelete(prevRe => !prevRe);
           }
         })
         .catch(err => {
           return err;
         })
-        setOpen(true);
     })();
+
   }
 
   function SaveEdit() {
@@ -85,25 +96,9 @@ function TaskBox(props) {
         .catch(err => {
           return err;
         })
-        setOpen(true);
+      setOpen(true);
     })();
   }
-
-  function CloseSnack(){
-    setOpen(false);
-  }
-
-  const action = (
-    <>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-      >
-        <CloseIcon fontSize="small" onClick={CloseSnack}/>
-      </IconButton>
-    </>
-  );
 
   return (
     <div key={edit.id} >
@@ -113,7 +108,6 @@ function TaskBox(props) {
         onClose={() => {
           setOpen(false);
         }}
-        
         autoHideDuration={6000}
         message={notify}
         action={action}
@@ -164,41 +158,41 @@ function TaskBox(props) {
         </div>
       </div>
       <div className='tasklist-btn'>
-      <Stack sx={{ width: '100%' }} spacing={2}>
-        <FormControl fullWidth >
-          {!taskEdit && <Button
-            className="task-edit-btn"
-            variant="contained"
-            color="warning"
-            size="small"
-            name="Edit"
-            onClick={setItEditable}
-            startIcon={<EditIcon />}>
-            Edit
-          </Button>}
-          {taskEdit && <Button
-            className="task-edit-btn"
-            variant="contained"
-            color="warning"
-            size="small"
-            name="Submit"
-            onClick={SaveEdit}
-            startIcon={<EditIcon />}>
-            Submit
-          </Button>}
-        </FormControl>
-        <FormControl fullWidth >
-          <Button
-            className="task-remove-btn"
-            variant='outlined'
-            color="error"
-            size="small"
-            onClick={DeleteIt}
-            startIcon={<DeleteIcon />}>
-            Remove
-          </Button>
-        </FormControl>
-      </Stack>
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          <FormControl fullWidth >
+            {!taskEdit && <Button
+              className="task-edit-btn"
+              variant="contained"
+              color="warning"
+              size="small"
+              name="Edit"
+              onClick={setItEditable}
+              startIcon={<EditIcon />}>
+              Edit
+            </Button>}
+            {taskEdit && <Button
+              className="task-edit-btn"
+              variant="contained"
+              color="warning"
+              size="small"
+              name="Submit"
+              onClick={SaveEdit}
+              startIcon={<EditIcon />}>
+              Submit
+            </Button>}
+          </FormControl>
+          <FormControl fullWidth >
+            <Button
+              className="task-remove-btn"
+              variant='outlined'
+              color="error"
+              size="small"
+              onClick={DeleteIt}
+              startIcon={<DeleteIcon />}>
+              Remove
+            </Button>
+          </FormControl>
+        </Stack>
       </div>
     </div>
   )

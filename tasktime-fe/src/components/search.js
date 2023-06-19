@@ -4,17 +4,15 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 
-
-
 function Search(props) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [tasksD, setTasksD] = useState([]);
-  const loading = open && tasksD.length === 0;
-
+  // This loading allows for the Search List to be reloaded any time open for updated listing
+  const loading = open;
 
   useEffect(() => {
-    // //Set loading to be true from focus
+    //Set loading to be true from focus
     let active = true;
     //Check loading to get Tasks Listing else break out
     //Do not get Tasks Listing
@@ -28,19 +26,31 @@ function Search(props) {
           return response.json();
         })
         .then(data => {
-          const selOpt = [];
-          
-          //Extract the who for assignee to use in search drop list
-          const whoData = data.map((d) => {
-            return selOpt[d._id] = d.who;
-          });
-          //a default option to show all
-          whoData[0]='Full List';
-          //create unique records simply remove dubplicates
-          const uniqueData = [...new Set(whoData)];
-          //Set Tasks Listing
-          if (active) {
-            setTasksD([...uniqueData]);
+          if (!data.error) {
+            const selOpt = [];
+            //A default option to show all records from dropdown
+            selOpt[0] = 'Full List';
+            if (data.length !== 1) {
+              //Extract the who for assignee to use in search drop list
+              data.map((d, key) => {
+                selOpt[key+1] = d.who;
+              });
+              //create unique records simply remove dubplicates
+              const uniqueData = [...new Set(selOpt)];
+              //Set Search Dropdown with unique Assignee Listing
+              if (active) {
+                setTasksD([...uniqueData]);
+              }
+            } else {
+              data.map((d, key) => {
+                selOpt[key] = d.who;
+              });
+              if (active) {
+                setTasksD([...selOpt]);
+              }
+            }
+          } else if (data.error === 'No records found.') {
+            setOpen(false);        
           }
         })
     })();
@@ -50,10 +60,9 @@ function Search(props) {
     };
   }, [loading, props.Searched, inputValue]);
 
-
   useEffect(() => {
     (async () => {
-      const url = (inputValue === 'Full List')?"http://localhost:4000/api/tasks":`http://localhost:4000/api/tasks?who=${inputValue}`;
+      const url = (inputValue === 'Full List') ? "http://localhost:4000/api/tasks" : `http://localhost:4000/api/tasks?who=${inputValue}`;
       await fetch(url)
         .then(response => {
           return response.json();
@@ -61,7 +70,6 @@ function Search(props) {
         .then(data => {
           if (!data.error) {
             props.Searcher([...data]);
-            
           }
         })
     })();
@@ -88,7 +96,6 @@ function Search(props) {
           <TextField
             {...params}
             label="Search Assignee"
-            
             InputProps={{
               ...params.InputProps,
               endAdornment: (

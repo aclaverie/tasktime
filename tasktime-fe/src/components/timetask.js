@@ -11,12 +11,75 @@ function Timetask() {
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
   const [recDelete, setRecDelete] = useState(false);
   const [marker, setMarker] = useState("info");
-  const [notify, setNotify] = useState("Click in Search Assignee and type name to filter list, then select assignee and hit enter to show to do tasks.");
+  const [notify, setNotify] = useState("Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.");
   const [tasks, setTasks] = useState([]);
   const loading = open && tasks.length === 0;
+
+  useEffect(() => {
+    (async () => {
+      await fetch("http://localhost:4000/api/tasks")
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          if (!data.error) {
+            setTasks([...data]);
+            setOpen(open => !open);
+            if (recDelete) {
+              Notifier(data, 'delete');
+            }
+          } else if (data.error === 'No records found.') {
+            setTasks([]);
+            Notifier(data, 'none');
+          }
+
+
+          // console.log(data);
+          // 
+          //   setTasks([...data]);
+          //   setOpen(open => !open);
+          // } else if (data.error === 'No records found.') {
+          //   setTasks([]);
+          //   Notifier(data, 'delete');
+          // } else {
+          //   setTasks([...data]);
+          //   console.log('Deleted record yet still have a task list')
+          //   Notifier(data, 'delete');
+          // }
+        })
+    })();
+  }, [loading, saved, recDelete]);
+
+  function Notifier(data, flag) {
+    switch (flag) {
+      case ('save'):
+        if (!data.error) {
+          setMarker("success");
+          setNotify(`Last saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
+        } else {
+          setMarker("error");
+          setNotify(`Last submission did not save, error: ${data.error}`);
+        }
+        break;
+      case ('standard'):
+        if (!data.error) {
+          setMarker("info");
+          setNotify(`Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.`);
+        } 
+        break;
+      case ('delete'):
+        setMarker("error");
+        setNotify('Record has been deleted!');
+        break;
+      case ('none'):
+        setMarker("info");
+        setNotify('Add a new task!');
+        break;
+    }
+  }
 
   function saveNewTask(newTask) {
     const requestOptions = {
@@ -31,52 +94,21 @@ function Timetask() {
           return response.json();
         })
         .then(data => {
-          Notifier(data, setNotify, setSaved, setError);
+          Notifier(data, 'save');
         })
     })();
+    setSaved(prevSa => !prevSa);
   }
 
   function openTask() {
     setShow(prevOpen => !prevOpen);
     setCompose(prevCompose => !prevCompose);
-    
-    setNotify("Click in Search Assignee and type name to filter list, then select assignee and hit enter to show to do tasks.");
-    setMarker("info");
-    setSaved(false);
-    setError(false);
-  }
-
-  useEffect(() => {
-    (async () => {
-      await fetch("http://localhost:4000/api/tasks")
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          console.log(data);
-          setTasks([...data]);
-          setOpen(open => !open);
-        })
-    })();
-  }, [loading, saved]);
-
-  useEffect(() => {
-    if (!saved && !error) {
-      setMarker("info");
-    } else if (saved && !error) {
-      setMarker("success");
-    } else if (!saved && error ) {
-      setMarker("error");
+    if (tasks.length === 0) {
+      Notifier(tasks, 'none');
+    } else if (tasks.length !== 0){
+      Notifier(tasks, 'standard');
     }
-  },[saved, error]);
-
-  // React.useEffect(() => {
-  //   if (!open) {
-  //     setTasks([]);
-  //   }
-  // }, [open]);
-
-  
+  }
 
   return (
     <div className='over-box'>
@@ -85,7 +117,7 @@ function Timetask() {
         <Alert severity={marker}>{notify}</Alert>
         <div className='add-box'>
           <AddTask handleClick={openTask} sign={show} />
-          {compose && <WriteTask Saving={saveNewTask}  />}
+          {compose && <WriteTask Saving={saveNewTask} />}
         </div>
       </div>
       <div>
@@ -95,16 +127,6 @@ function Timetask() {
   )
 }
 
-export { Timetask, Notifier };
+export { Timetask };
 
-function Notifier(data, setNotify, setSaved, setError) {
-  if (!data.error) {
-    setNotify(`Last saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
-    setSaved(true);
-    setError(false);
-  } else {
-    setNotify(`Last submission did not save, error: ${data.error}`);
-    setSaved(false);
-    setError(true);
-  }
-}
+
