@@ -20,7 +20,7 @@ function App() {
         </div>
       </header>
       
-      <main className="container">
+      <main className="container" >
         <h2>Welcome to Task-Time!</h2>
         <Timetask />        
       </main>

@@ -29,10 +29,13 @@ function Search(props) {
         })
         .then(data => {
           const selOpt = [];
+          
           //Extract the who for assignee to use in search drop list
           const whoData = data.map((d) => {
             return selOpt[d._id] = d.who;
           });
+          //a default option to show all
+          whoData[0]='Full List';
           //create unique records simply remove dubplicates
           const uniqueData = [...new Set(whoData)];
           //Set Tasks Listing
@@ -45,11 +48,12 @@ function Search(props) {
     return () => {
       active = false;
     };
-  }, [loading, props.Searched]);
+  }, [loading, props.Searched, inputValue]);
+
 
   useEffect(() => {
     (async () => {
-      const url = `http://localhost:4000/api/tasks?who=${inputValue}`;
+      const url = (inputValue === 'Full List')?"http://localhost:4000/api/tasks":`http://localhost:4000/api/tasks?who=${inputValue}`;
       await fetch(url)
         .then(response => {
           return response.json();
@@ -84,7 +88,7 @@ function Search(props) {
           <TextField
             {...params}
             label="Search Assignee"
-
+            
             InputProps={{
               ...params.InputProps,
               endAdornment: (

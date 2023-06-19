@@ -1,9 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
-import { Button, Snackbar, Stack } from '@mui/material';
+import { Button, Snackbar, Stack, Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 function TaskBox(props) {
   const [open, setOpen] = useState(false);
@@ -38,18 +40,21 @@ function TaskBox(props) {
   }
 
   function DeleteIt() {
-    alert("Sorry there is no data recovery from this DELETE action!");
+    
+    <Alert>Sorry there is no data recovery from this DELETE action!</Alert>
     const requestOptions = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
+
     const url = `http://localhost:4000/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
           // console.log(response.ok);
           if(response.ok){
+            setNotify(`The record was successfully removed!`);
             //let timetask component knows records was deleted to refresh list
             props.RecToDelete(true);
           }
@@ -57,6 +62,7 @@ function TaskBox(props) {
         .catch(err => {
           return err;
         })
+        setOpen(true);
     })();
   }
 
@@ -73,31 +79,44 @@ function TaskBox(props) {
           return response.json();
         })
         .then(data => {
-          setOpen(true);
           setNotify(`Last Edit saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
-          // console.log(data);
-          
-          // if (!data.error) {
-          //   // setTasks([]);
-          //   setSaved(true);
-          //   return data;
-          // }
-          setOpen(false);
           setTaskEdit(preEd => !preEd);
         })
         .catch(err => {
           return err;
         })
+        setOpen(true);
     })();
   }
+
+  function CloseSnack(){
+    setOpen(false);
+  }
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+      >
+        <CloseIcon fontSize="small" onClick={CloseSnack}/>
+      </IconButton>
+    </>
+  );
 
   return (
     <div key={edit.id} >
       <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        
         autoHideDuration={6000}
         message={notify}
+        action={action}
       />
       <div className='box-top'>
         <FormControl fullWidth >
