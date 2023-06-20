@@ -11,7 +11,6 @@ function Timetask() {
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState(false);
-  // const [error, setError] = useState(false);
   const [recDelete, setRecDelete] = useState(false);
   const [marker, setMarker] = useState("info");
   const [notify, setNotify] = useState("Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.");
@@ -20,7 +19,7 @@ function Timetask() {
 
   useEffect(() => {
     (async () => {
-      await fetch("http://localhost:4000/api/tasks")
+      await fetch(`http://${req.headers.host}/api/tasks`)
         .then(response => {
           return response.json();
         })
@@ -35,20 +34,6 @@ function Timetask() {
             setTasks([]);
             Notifier(data, 'none');
           }
-
-
-          // console.log(data);
-          // 
-          //   setTasks([...data]);
-          //   setOpen(open => !open);
-          // } else if (data.error === 'No records found.') {
-          //   setTasks([]);
-          //   Notifier(data, 'delete');
-          // } else {
-          //   setTasks([...data]);
-          //   console.log('Deleted record yet still have a task list')
-          //   Notifier(data, 'delete');
-          // }
         })
     })();
   }, [loading, saved, recDelete]);
@@ -78,6 +63,10 @@ function Timetask() {
         setMarker("info");
         setNotify('Add a new task!');
         break;
+      default:
+        setMarker("info");
+        setNotify(`Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.`);
+        break;
     }
   }
 
@@ -87,7 +76,7 @@ function Timetask() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newTask)
     };
-    const url = `http://localhost:4000/api/tasks`;
+    const url = `http://${req.headers.host}/api/tasks`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {

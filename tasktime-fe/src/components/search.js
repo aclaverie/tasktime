@@ -32,22 +32,14 @@ function Search(props) {
             selOpt[0] = 'Full List';
             if (data.length !== 1) {
               //Extract the who for assignee to use in search drop list
-              data.map((d, key) => {
-                selOpt[key+1] = d.who;
-              });
+              data.map((d, key) => ( selOpt[key+1] = d.who ));
               //create unique records simply remove dubplicates
               const uniqueData = [...new Set(selOpt)];
               //Set Search Dropdown with unique Assignee Listing
-              if (active) {
-                setTasksD([...uniqueData]);
-              }
+              if (active) { setTasksD([...uniqueData]); }
             } else {
-              data.map((d, key) => {
-                selOpt[key] = d.who;
-              });
-              if (active) {
-                setTasksD([...selOpt]);
-              }
+              data.map((d, key) => ( selOpt[key] = d.who ));
+              if (active) { setTasksD([...selOpt]); }
             }
           } else if (data.error === 'No records found.') {
             setOpen(false);        
@@ -60,7 +52,7 @@ function Search(props) {
     };
   }, [loading, props.Searched, inputValue]);
 
-  useEffect(() => {
+  useEffect((props) => {
     (async () => {
       const url = (inputValue === 'Full List') ? "http://localhost:4000/api/tasks" : `http://localhost:4000/api/tasks?who=${inputValue}`;
       await fetch(url)

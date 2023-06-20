@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
-import { Button, Snackbar, Stack, Alert } from '@mui/material';
+import { Button, Snackbar, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -61,7 +61,7 @@ function TaskBox(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
-    const url = `http://localhost:4000/api/tasks/${edit.id}`;
+    const url = `http://${req.headers.host}/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
@@ -83,7 +83,7 @@ function TaskBox(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
-    const url = `http://localhost:4000/api/tasks/${edit.id}`;
+    const url = `http://${req.headers.host}/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
