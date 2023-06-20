@@ -12,6 +12,7 @@ function WriteTask(props) {
   const [value, setValue] = useState('');
   const [newTask, setNewTask] = useState({
     task: '',
+    desc: '',
     who: '',
     dueDate: '',
     done: false,
@@ -22,13 +23,14 @@ function WriteTask(props) {
     const dDate = value.$d.toLocaleDateString();
     setNewTask((prevData) => {
       prevData.dueDate = dDate;
-      return{
-       prevData
+      return {
+        prevData
       }
     });
     props.Saving(newTask);
     setNewTask({
       task: '',
+      desc: '',
       who: '',
       dueDate: '',
       done: false,
@@ -37,7 +39,6 @@ function WriteTask(props) {
   }
 
   function handleChange(e) {
-    // console.log(e);
     const { name, value, type, checked } = e.target;
     setNewTask((prevTask) => {
       return {
@@ -67,14 +68,24 @@ function WriteTask(props) {
           />
         </FormControl>
       </div>
+      <div className='box-middle'>
+        <FormControl fullWidth>
+          <FormControlLabel
+            name="desc"
+            value={newTask.desc}
+            control={<TextField label="Desc" variant="outlined" fullWidth />}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </div>
       <div className='box-bottom'>
         <div >
           <FormControl >
             <FormControlLabel
-              control={<Checkbox />}
-              label="Done"
               name="done"
               checked={newTask.done}
+              control={<Checkbox />}
+              label="Done"
               onChange={handleChange}
             />
           </FormControl>
@@ -89,7 +100,7 @@ function WriteTask(props) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={['DateField']}>
                     <DateField label="DueDate" value={value}
-              onChange={(newValue) => setValue(newValue)}/>
+                      onChange={(newValue) => setValue(newValue)} />
                   </DemoContainer>
                 </LocalizationProvider>
               }

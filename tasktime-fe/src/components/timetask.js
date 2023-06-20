@@ -71,6 +71,7 @@ function Timetask() {
   }
 
   function saveNewTask(newTask) {
+    console.log(newTask);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

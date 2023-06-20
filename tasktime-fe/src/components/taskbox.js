@@ -14,11 +14,12 @@ function TaskBox(props) {
   const [edit, setEdit] = useState({
     id: props.data._id,
     task: props.data.task,
+    desc: props.data.desc,
     who: props.data.who,
     dueDate: props.data.dueDate,
     done: props.data.done
   });
-   
+
   const action = (
     <>
       <IconButton
@@ -74,7 +75,6 @@ function TaskBox(props) {
           return err;
         })
     })();
-
   }
 
   function SaveEdit() {
@@ -90,7 +90,7 @@ function TaskBox(props) {
           return response.json();
         })
         .then(data => {
-          setNotify(`Last Edit saved: Task "${data.task}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
+          setNotify(`Last Edit saved: Task "${data.task}" "${data.desc}" assigned to ${data.who} due on ${data.dueDate} was saved successfully!`);
           setTaskEdit(preEd => !preEd);
         })
         .catch(err => {
@@ -99,7 +99,7 @@ function TaskBox(props) {
       setOpen(true);
     })();
   }
-
+console.log(props.data)
   return (
     <div key={edit.id} >
       <Snackbar
@@ -131,6 +131,19 @@ function TaskBox(props) {
             onChange={handleChange}
           />
         </FormControl>
+      </div>
+      <div>
+        <div className='box-middle'>
+          <FormControl fullWidth>
+            <FormControlLabel
+              name="desc"
+              value={edit.desc}
+              disabled={!taskEdit}
+              control={<TextField label="Desc" variant="outlined" fullWidth />}
+              onChange={handleChange}
+            />
+          </FormControl>
+        </div>
       </div>
       <div className='box-bottom'>
         <div >
