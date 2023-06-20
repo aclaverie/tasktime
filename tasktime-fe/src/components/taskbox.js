@@ -50,7 +50,6 @@ function TaskBox(props) {
 
   function setItEditable(e) {
     e.preventDefault();
-    console.log(edit);
     setTaskEdit(prevEd => !prevEd);
   }
 

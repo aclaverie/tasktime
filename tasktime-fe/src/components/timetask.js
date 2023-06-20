@@ -53,7 +53,7 @@ function Timetask() {
         if (!data.error) {
           setMarker("info");
           setNotify(`Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.`);
-        } 
+        }
         break;
       case ('delete'):
         setMarker("error");
@@ -84,9 +84,10 @@ function Timetask() {
         })
         .then(data => {
           Notifier(data, 'save');
+          setSaved(prevSa => !prevSa);
         })
     })();
-    setSaved(prevSa => !prevSa);
+    
   }
 
   function openTask() {
@@ -94,7 +95,7 @@ function Timetask() {
     setCompose(prevCompose => !prevCompose);
     if (tasks.length === 0) {
       Notifier(tasks, 'none');
-    } else if (tasks.length !== 0){
+    } else if (tasks.length !== 0) {
       Notifier(tasks, 'standard');
     }
   }
