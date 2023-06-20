@@ -52,7 +52,7 @@ function Search(props) {
     };
   }, [loading, props.Searched, inputValue]);
 
-  useEffect((props) => {
+  useEffect(() => {
     (async () => {
       const url = (inputValue === 'Full List') ? `https://timetaskapi.onrender.com/api/tasks` : `https://timetaskapi.onrender.com/api/tasks?who=${inputValue}`;
       await fetch(url)
