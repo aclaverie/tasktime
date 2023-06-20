@@ -55,7 +55,7 @@ function WriteTask(props) {
           <FormControlLabel
             name="task"
             value={newTask.task}
-            control={<TextField label="Task" variant="outlined" fullWidth />}
+            control={<TextField label="Task Name" variant="outlined" fullWidth />}
             onChange={handleChange}
           />
         </FormControl>
@@ -73,7 +73,7 @@ function WriteTask(props) {
           <FormControlLabel
             name="desc"
             value={newTask.desc}
-            control={<TextField label="Desc" variant="outlined" fullWidth />}
+            control={<TextField label="Description" variant="outlined" fullWidth />}
             onChange={handleChange}
           />
         </FormControl>

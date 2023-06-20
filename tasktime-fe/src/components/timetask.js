@@ -24,6 +24,7 @@ function Timetask() {
           return response.json();
         })
         .then(data => {
+          console.log(data)
           if (!data.error) {
             setTasks([...data]);
             setOpen(open => !open);

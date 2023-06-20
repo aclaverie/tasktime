@@ -118,7 +118,7 @@ console.log(props.data)
             disabled={!taskEdit}
             name="task"
             value={edit.task}
-            control={<TextField label="Task" variant="outlined" fullWidth />}
+            control={<TextField label="Task Name" variant="outlined" fullWidth />}
             onChange={handleChange}
           />
         </FormControl>
@@ -139,7 +139,7 @@ console.log(props.data)
               name="desc"
               value={edit.desc}
               disabled={!taskEdit}
-              control={<TextField label="Desc" variant="outlined" fullWidth />}
+              control={<TextField label="Description" variant="outlined" fullWidth />}
               onChange={handleChange}
             />
           </FormControl>
