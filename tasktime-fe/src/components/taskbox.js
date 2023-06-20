@@ -151,7 +151,7 @@ console.log(props.data)
             <FormControlLabel
               disabled={!taskEdit}
               control={<Checkbox />}
-              label="Done"
+              label="Complete"
               name="done"
               checked={edit.done}
               onChange={handleChange}

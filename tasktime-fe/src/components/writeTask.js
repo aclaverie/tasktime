@@ -85,7 +85,7 @@ function WriteTask(props) {
               name="done"
               checked={newTask.done}
               control={<Checkbox />}
-              label="Done"
+              label="Complete"
               onChange={handleChange}
             />
           </FormControl>
