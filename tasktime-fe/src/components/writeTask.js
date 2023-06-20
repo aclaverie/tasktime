@@ -2,8 +2,14 @@ import React from 'react';
 import { useState } from 'react';
 import { Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material';
 import { Button } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-function WriteTask(props){
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateField } from '@mui/x-date-pickers/DateField';
+
+function WriteTask(props) {
+  const [value, setValue] = useState('');
   const [newTask, setNewTask] = useState({
     task: '',
     who: '',
@@ -11,9 +17,15 @@ function WriteTask(props){
     done: false,
   })
 
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault();
-    // console.log(newTask);
+    const dDate = value.$d.toLocaleDateString();
+    setNewTask((prevData) => {
+      prevData.dueDate = dDate;
+      return{
+       prevData
+      }
+    });
     props.Saving(newTask);
     setNewTask({
       task: '',
@@ -21,12 +33,13 @@ function WriteTask(props){
       dueDate: '',
       done: false,
     });
+    setValue('');
   }
 
-  function handleChange(e){
-    e.preventDefault();
-    const {name, value, type, checked} = e.target;
-    setNewTask((prevTask)=>{
+  function handleChange(e) {
+    // console.log(e);
+    const { name, value, type, checked } = e.target;
+    setNewTask((prevTask) => {
       return {
         ...prevTask,
         [name]: (type === "checked") ? checked : value,
@@ -34,54 +47,61 @@ function WriteTask(props){
     });
   }
 
-  return(
+  return (
     <form className='form-box'>
-        <div className='box-top'>
-          <FormControl fullWidth >
-            <FormControlLabel
-              name="task"
-              value={newTask.task}
-              control={<TextField label="Task" variant="outlined" fullWidth />}
-              onChange={handleChange}
-              />
-          </FormControl>
+      <div className='box-top'>
+        <FormControl fullWidth >
+          <FormControlLabel
+            name="task"
+            value={newTask.task}
+            control={<TextField label="Task" variant="outlined" fullWidth />}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl >
+          <FormControlLabel
+            name="who"
+            value={newTask.who}
+            control={<TextField label="Assignee" variant="outlined" />}
+            onChange={handleChange}
+          />
+        </FormControl>
+      </div>
+      <div className='box-bottom'>
+        <div >
           <FormControl >
             <FormControlLabel
-              name="who"
-              value={newTask.who}
-              control={<TextField label="Assignee" variant="outlined" />}
+              control={<Checkbox />}
+              label="Done"
+              name="done"
+              checked={newTask.done}
               onChange={handleChange}
-              />
+            />
           </FormControl>
         </div>
-        <div className='box-bottom'>
-          <div >
-            <FormControl >
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Done"
-                name="done"
-                checked={newTask.done}
-                onChange={handleChange}
-                />
-            </FormControl>  
-          </div>
-          <div >
+        <div >
           <FormControl >
             <FormControlLabel
               name="dueDate"
-              value={newTask.dueDate}
-              control={<TextField label="Due Date" variant="outlined" />}
-              onChange={handleChange}
-              />
+              value={value}
+              onChange={(newValue) => setValue(newValue)}
+              control={
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DateField']}>
+                    <DateField label="DueDate" value={value}
+              onChange={(newValue) => setValue(newValue)}/>
+                  </DemoContainer>
+                </LocalizationProvider>
+              }
+            />
           </FormControl>
-          </div>
         </div>
-        <div className='box-btn'>
-          <FormControl fullWidth >
-            <Button variant='contained' onClick={handleSubmit} color="error" >Submit</Button>
-          </FormControl>
-        </div>
+      </div>
+      <div className='box-btn'>
+        <FormControl fullWidth >
+          <Button variant='contained' onClick={handleSubmit} color="error" >Submit</Button>
+        </FormControl>
+      </div>
     </form>
   )
 }
