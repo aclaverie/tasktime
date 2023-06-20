@@ -21,7 +21,7 @@ function Search(props) {
     }
     //Use of iFFY to automatically asynchornously fetch Tasks Data to extract Assignees (prop: who)
     (async () => {
-      await fetch("http://localhost:4000/api/tasks")
+      await fetch(`https://timetaskapi.onrender.com/api/tasks`)
         .then(response => {
           return response.json();
         })
@@ -54,7 +54,7 @@ function Search(props) {
 
   useEffect((props) => {
     (async () => {
-      const url = (inputValue === 'Full List') ? "http://localhost:4000/api/tasks" : `http://localhost:4000/api/tasks?who=${inputValue}`;
+      const url = (inputValue === 'Full List') ? `https://timetaskapi.onrender.com/api/tasks` : `https://timetaskapi.onrender.com/api/tasks?who=${inputValue}`;
       await fetch(url)
         .then(response => {
           return response.json();

@@ -61,7 +61,7 @@ function TaskBox(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
-    const url = `http://${req.headers.host}/api/tasks/${edit.id}`;
+    const url = `https://timetaskapi.onrender.com/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
@@ -83,7 +83,7 @@ function TaskBox(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(edit)
     };
-    const url = `http://${req.headers.host}/api/tasks/${edit.id}`;
+    const url = `http://timetaskapi.onrender.com/api/tasks/${edit.id}`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
