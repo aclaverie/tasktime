@@ -19,7 +19,7 @@ function Timetask() {
 
   useEffect(() => {
     (async () => {
-      await fetch(`http://timetaskapi.onrender.com/api/tasks`)
+      await fetch(`https://timetaskapi.onrender.com/api/tasks`)
         .then(response => {
           return response.json();
         })
@@ -76,7 +76,7 @@ function Timetask() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newTask)
     };
-    const url = `http://timetaskapi.onrender.com/api/tasks`;
+    const url = `https://timetaskapi.onrender.com/api/tasks`;
     (async () => {
       await fetch(url, requestOptions)
         .then(response => {
