@@ -10,7 +10,7 @@ function Search(props) {
   const [tasksD, setTasksD] = useState([]);
   // This loading allows for the Search List to be reloaded any time open for updated listing
   const loading = open;
-  const Search = props.Searched
+  const { search } = props
 
   useEffect(() => {
     //Set loading to be true from focus
@@ -51,7 +51,7 @@ function Search(props) {
     return () => {
       active = false;
     };
-  }, [loading, Search, inputValue]);
+  }, [loading, search, inputValue]);
 
   useEffect(() => {
     (async () => {
@@ -66,7 +66,7 @@ function Search(props) {
           }
         })
     })();
-  }, [inputValue, Search]);
+  }, [inputValue, search]);
 
   return (
     <div className='search'>
