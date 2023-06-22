@@ -20,22 +20,24 @@ function WriteTask(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const dDate = value.$d.toLocaleDateString();
-    setNewTask((prevData) => {
-      prevData.dueDate = dDate;
-      return {
-        prevData
-      }
-    });
-    props.Saving(newTask);
-    setNewTask({
-      task: '',
-      desc: '',
-      who: '',
-      dueDate: '',
-      done: false,
-    });
-    setValue('');
+    if (value !== "undefined") {
+      const dDate = value.$d.toLocaleDateString();
+      setNewTask((prevData) => {
+        prevData.dueDate = dDate;
+        return {
+          prevData
+        }
+      });
+      props.Saving(newTask);
+      setNewTask({
+        task: '',
+        desc: '',
+        who: '',
+        dueDate: '',
+        done: false,
+      });
+      setValue('');
+    }
   }
 
   function handleChange(e) {
