@@ -24,7 +24,7 @@ function Timetask() {
           return response.json();
         })
         .then(data => {
-          console.log(data)
+          // console.log(data)
           if (!data.error) {
             setTasks([...data]);
             setOpen(open => !open);
@@ -64,6 +64,10 @@ function Timetask() {
         setMarker("info");
         setNotify('Add a new task!');
         break;
+      case ('blank'):
+        setMarker("error");
+        setNotify('Kindly fill out the new task form before submitting, thanks!');
+        break;
       default:
         setMarker("info");
         setNotify(`Click in Search Assignee and type name to filter list, then select to show all to do tasks for that selection.`);
@@ -72,7 +76,7 @@ function Timetask() {
   }
 
   function saveNewTask(newTask) {
-    console.log(newTask);
+    // console.log(newTask);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -109,7 +113,7 @@ function Timetask() {
         <Alert severity={marker}>{notify}</Alert>
         <div className='add-box'>
           <AddTask handleClick={openTask} sign={show} />
-          {compose && <WriteTask Saving={saveNewTask} />}
+          {compose && <WriteTask Saving={saveNewTask} Notifier={Notifier} />}
         </div>
       </div>
       <div>

@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
 
 function WriteTask(props) {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState();
   const [newTask, setNewTask] = useState({
     task: '',
     desc: '',
@@ -17,10 +17,13 @@ function WriteTask(props) {
     dueDate: '',
     done: false,
   })
+  const { Notifier } = props;
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (value !== "undefined") {
+    if (!value) {
+      Notifier(null, 'blank');
+    } else {
       const dDate = value.$d.toLocaleDateString();
       setNewTask((prevData) => {
         prevData.dueDate = dDate;

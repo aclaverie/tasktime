@@ -40,14 +40,12 @@ function TaskBox(props) {
   function handleChange(e) {
     e.preventDefault();
     const { name, value, type, checked } = e.target;
-    // console.log(name);
     setEdit((prevData) => {
       return {
         ...prevData,
         [name]: type === "checkbox" ? checked : value
       }
     })
-    // console.log(edit);
   }
 
   function setItEditable(e) {
@@ -99,7 +97,7 @@ function TaskBox(props) {
       setOpen(true);
     })();
   }
-console.log(props.data)
+  
   return (
     <div key={edit.id} >
       <Snackbar
