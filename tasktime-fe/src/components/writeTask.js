@@ -60,15 +60,15 @@ function WriteTask(props) {
           <FormControlLabel
             name="task"
             value={newTask.task}
-            control={<TextField label="Task Name" variant="outlined" fullWidth />}
+            control={<TextField label="Task Name" variant="outlined" fullWidth sx={{paddingBottom: 2,}} />}
             onChange={handleChange}
           />
         </FormControl>
-        <FormControl >
+        <FormControl fullWidth >
           <FormControlLabel
             name="who"
             value={newTask.who}
-            control={<TextField label="Assignee" variant="outlined" />}
+            control={<TextField label="Assignee" variant="outlined" fullWidth sx={{paddingBottom: 2,}} />}
             onChange={handleChange}
           />
         </FormControl>
@@ -85,26 +85,28 @@ function WriteTask(props) {
       </div>
       <div className='box-bottom'>
         <div >
-          <FormControl >
+          <FormControl fullWidth >
             <FormControlLabel
               name="done"
               checked={newTask.done}
-              control={<Checkbox />}
+              control={<Checkbox fullWidth />}
               label="Complete"
               onChange={handleChange}
             />
           </FormControl>
         </div>
         <div >
-          <FormControl >
+          <FormControl fullWidth >
             <FormControlLabel
               name="dueDate"
               value={value}
               onChange={(newValue) => setValue(newValue)}
               control={
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
                   <DemoContainer components={['DateField']}>
-                    <DateField label="DueDate" value={value}
+                    <DateField 
+                      label="DueDate" 
+                      value={value}
                       onChange={(newValue) => setValue(newValue)} />
                   </DemoContainer>
                 </LocalizationProvider>

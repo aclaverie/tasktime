@@ -116,16 +116,16 @@ function TaskBox(props) {
             disabled={!taskEdit}
             name="task"
             value={edit.task}
-            control={<TextField label="Task Name" variant="outlined" fullWidth />}
+            control={<TextField label="Task Name" variant="outlined" fullWidth sx={{paddingBottom: 2,}} />}
             onChange={handleChange}
           />
         </FormControl>
-        <FormControl >
+        <FormControl fullWidth >
           <FormControlLabel
             disabled={!taskEdit}
             name="who"
             value={edit.who}
-            control={<TextField label="Assignee" variant="outlined" />}
+            control={<TextField label="Assignee" variant="outlined" fullWidth sx={{paddingBottom: 2,}} />}
             onChange={handleChange}
           />
         </FormControl>
@@ -145,7 +145,7 @@ function TaskBox(props) {
       </div>
       <div className='box-bottom'>
         <div >
-          <FormControl >
+          <FormControl fullWidth>
             <FormControlLabel
               disabled={!taskEdit}
               control={<Checkbox />}
@@ -157,13 +157,13 @@ function TaskBox(props) {
           </FormControl>
         </div>
         <div >
-          <FormControl >
+          <FormControl fullWidth >
             <FormControlLabel
-              disabled={!taskEdit}
               name="dueDate"
               value={edit.dueDate}
-              control={<TextField label="Due Date" variant="outlined" />}
+              disabled={!taskEdit}
               onChange={handleChange}
+              control={<TextField label="Due Date" variant="outlined" fullWidth />}             
             />
           </FormControl>
         </div>
